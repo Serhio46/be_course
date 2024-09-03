@@ -1,0 +1,22 @@
+{
+  "users": [
+    {
+      "username": "John Doe",
+      "email": "joe@mail.ru",
+      "id": 1,
+      "password": "555666"
+    },
+    {
+      "username": "sdfsdf Doe",
+      "email": "joe@mail.ru",
+      "id": 3,
+      "password": "9999"
+    },
+    {
+      "username": "sdf Dsssssssssssssssoe",
+      "email": "joe@mail.ru",
+      "id": 4,
+      "password": "234234324"
+    }
+  ]
+}
