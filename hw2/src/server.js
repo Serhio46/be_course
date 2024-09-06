@@ -1,11 +1,13 @@
 const express = require('express');
 const router = require('./routes/user');
+const loggerMiddleware = require('./middlewares/logger');
 
 require('dotenv').config();
 
 const app = express();
 
 app.use(express.json());
+app.use(loggerMiddleware);
 app.use('/api/users', router);
 
 app.get('/api/hello', (req, res) => {
