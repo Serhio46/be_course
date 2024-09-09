@@ -7,7 +7,7 @@ const {
 	updateUserByIdValidation,
 	deleteUserByIdValidation,
 	getUsersValidation,
-} = require('../helpers/userValidator');
+} = require('../helpers/validators/userValidator');
 const UserController = require('../controllers/UserController');
 const { validateRequestMiddleware } = require('../middlewares/validateRequestMiddleware');
 

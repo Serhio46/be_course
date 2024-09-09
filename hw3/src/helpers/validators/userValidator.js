@@ -1,4 +1,5 @@
-const { body, param, query } = require('express-validator');
+const { body, query } = require('express-validator');
+const { uuidValidator } = require('./index');
 
 const createUserValidation = [
 	body('name')
@@ -17,15 +18,12 @@ const getUsersValidation = [
 	query('page').isInt({ min: 1 }).optional().withMessage('Page must be an integer greater than 0'),
 ];
 
-const getUserByIdValidation = [param('id').isString().withMessage('Id must be an integer')];
-
-const updateUserByIdValidation = [...getUserByIdValidation, ...createUserValidation.map(item => item.optional())];
-const deleteUserByIdValidation = getUserByIdValidation;
+const updateUserByIdValidation = [...uuidValidator, ...createUserValidation.map(item => item.optional())];
 
 module.exports = {
 	createUserValidation,
-	getUserByIdValidation,
+	getUserByIdValidation: uuidValidator,
 	updateUserByIdValidation,
-	deleteUserByIdValidation,
+	deleteUserByIdValidation: uuidValidator,
 	getUsersValidation,
 };

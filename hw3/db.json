@@ -15,19 +15,15 @@
 			"id": "9668ebcd-e5b3-497f-bab5-13a9df67a9d3"
 		},
 		{
-			"title": "8888asdasdasd",
-			"author": "author",
-			"genre": "genre",
-			"year": "year",
-			"id": "d48c6fb5-9773-473b-89fc-bf06ef328a90"
+			"title": "Sergunia",
+			"author": "asdasdasd@sad.ru",
+			"genre": "Fiction",
+			"year": "2221",
+			"id": "dca495ac-f5f5-43d2-a20b-d26e186f4430"
 		}
 	],
 	"users": [
 		{ "id": "7c4b3865-5020-4a37-8f5f-8b83bc9bab09", "name": "Petr", "email": "asdasd@asdsad.ru" },
-		{
-			"id": "dbacc34f-58d3-4409-82f9-bb44f729aef6",
-			"name": "Andre 8989222",
-			"email": "asdasd@asdsad.ru"
-		}
+		{ "id": "dbacc34f-58d3-4409-82f9-bb44f729aef6", "name": "Andre 8989222", "email": "asdasd@asdsad.ru" }
 	]
 }
