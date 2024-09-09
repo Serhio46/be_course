@@ -7,7 +7,8 @@ class UserController {
 	}
 
 	async getUsers(req, res) {
-		const result = await UserService.getUsers();
+		const { limit, page } = req.query;
+		const result = await UserService.getUsers(limit, page);
 
 		if (!result?.length) {
 			return res.status(404).json({ message: 'Users not found' });

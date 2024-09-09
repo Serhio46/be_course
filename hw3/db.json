@@ -23,12 +23,11 @@
 		}
 	],
 	"users": [
-		{ "id": "7c4b3865-5020-4a37-8f5f-8b83bc9bab09", "name": "Petr", "email": "asdasd@asdsad.ru", "password": "222111" },
+		{ "id": "7c4b3865-5020-4a37-8f5f-8b83bc9bab09", "name": "Petr", "email": "asdasd@asdsad.ru" },
 		{
 			"id": "dbacc34f-58d3-4409-82f9-bb44f729aef6",
-			"name": "Vsadik",
-			"email": "asdasd@asdsad.ru",
-			"password": "222111"
+			"name": "Andre 8989222",
+			"email": "asdasd@asdsad.ru"
 		}
 	]
 }

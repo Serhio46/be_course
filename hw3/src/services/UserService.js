@@ -11,9 +11,16 @@ class UserService {
 		return await fileHelper.writeFile('db.json', dbHelper.addNewEntry(db, newUser, 'users'));
 	}
 
-	async getUsers() {
+	async getUsers(limit, page) {
 		const { users } = await fileHelper.readFile('db.json');
-		return users;
+
+		if (!limit && !page) {
+			return users;
+		}
+
+		const startIndex = (page - 1) * limit;
+		const endIndex = startIndex + limit;
+		return users.slice(startIndex, endIndex);
 	}
 
 	async getUserById(id) {
