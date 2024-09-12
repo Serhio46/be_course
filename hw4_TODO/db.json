@@ -1,0 +1,14 @@
+{
+	"users": [
+		{
+			"userName": "Senya1",
+			"password": "$2b$04$x./01RbRruUNwNgNicIyXOPoPkzRcgXYJ6C9s6FlCTZMyfyGALZRG",
+			"id": "663f35f1-b4e5-4791-89cf-21fe9d5069b2"
+		},
+		{
+			"userName": "Senya12",
+			"password": "$2b$04$Sj.cEB51r/LxzyYgylYWOe1Qm/av5HLY1cn.Io64f3B2TUsEii/pS",
+			"id": "d0467006-44f5-4154-83b7-69c44f0520ce"
+		}
+	]
+}
