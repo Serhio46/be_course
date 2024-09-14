@@ -6,15 +6,16 @@ const dbHelper = require('../helpers/dbHelper');
 const User = require('../models/User');
 const TokenHelper = require('../helpers/tokenHelper');
 const UserDto = require('../dtos/user-dto');
+const ApiError = require('../exceptions/apiError');
 
 class UserService {
 	async registerUser({ userName, password }) {
 		try {
 			const db = await fileHelper.readFile('db.json');
-			const candidateIndex = db.users.findIndex(user => user.userName === userName);
+			const candidateIndex = db.users?.findIndex(user => user.userName === userName);
 
 			if (candidateIndex !== -1) {
-				throw new Error('User already exists');
+				throw ApiError.BadRequest('User already exists');
 			}
 
 			const hashedPassword = await bcrypt.hash(password, 3);
@@ -25,7 +26,7 @@ class UserService {
 			const { accessToken } = TokenHelper.generateTokens({ ...userDto });
 			return { user: userDto, accessToken };
 		} catch (e) {
-			throw new Error(e.message);
+			throw e;
 		}
 	}
 
@@ -35,20 +36,20 @@ class UserService {
 			const user = db.users.find(user => user.userName === userName);
 
 			if (!user) {
-				throw new Error('Incorrect username or password');
+				throw ApiError.BadRequest('Incorrect username or password');
 			}
 
 			const isPasswordValid = await bcrypt.compare(password, user.password);
 
 			if (!isPasswordValid) {
-				throw new Error('Incorrect username or password');
+				throw ApiError.BadRequest('Incorrect username or password');
 			}
 
 			const userDto = new UserDto(user);
 			const { accessToken } = TokenHelper.generateTokens({ ...userDto });
 			return { user: userDto, accessToken };
 		} catch (e) {
-			throw new Error(e.message);
+			throw e;
 		}
 	}
 }
