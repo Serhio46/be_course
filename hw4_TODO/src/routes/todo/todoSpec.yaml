@@ -1,0 +1,202 @@
+paths:
+  /api/todos:
+    post:
+      tags:
+        - Todo
+      summary: Create a todo
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateTodo'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Todo'
+        '401':
+          description: Authentication failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Unauthorized'
+    get:
+      tags:
+        - Todo
+      summary: Get all todos
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AllTodos'
+        '401':
+          description: Authentication failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Unauthorized'
+  /api/todos/{id}:
+    patch:
+      tags:
+        - Todo
+      summary: Update title
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: Todo id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                  example: 'Buy milk'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Todo'
+        '401':
+          description: Authentication failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Unauthorized'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: string
+                example: 'Forbidden'
+    delete:
+      tags:
+        - Todo
+      summary: Delete a todo
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: Todo id
+      responses:
+        '200':
+          description: Todo successfully deleted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Todo'
+        '401':
+          description: Authentication failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Unauthorized'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: string
+                example: 'Forbidden'
+  /api/todos/{id}/isCompleted:
+    patch:
+      tags:
+        - Todo
+      summary: Update isCompleted
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: Todo id
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Todo'
+        '401':
+          description: Authentication failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Unauthorized'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: string
+                example: 'Forbidden'
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    AllTodos:
+      type: array
+      items:
+        $ref: '#/components/schemas/Todo'
+    CreateTodo:
+      type: object
+      properties:
+        title:
+          type: string
+          example: 'Buy milk'
+        isCompleted:
+          type: boolean
+          example: false
+    Todo:
+      type: object
+      properties:
+        id:
+          type: string
+          example: 'c45583fa-cfa1-4216-aab9-7e18e9b8ce75'
+        title:
+          type: string
+          example: 'Buy milk'
+        isCompleted:
+          type: boolean
+          example: false
+        userId:
+          type: string
+          example: 'c45583fa-cfa1-4216-aab9-7e18e9b8ce76'
+    Unauthorized:
+      type: object
+      properties:
+        message:
+          type: string
+          example: 'Unauthorized'
+        statusCode:
+          type: integer
+          example: 401

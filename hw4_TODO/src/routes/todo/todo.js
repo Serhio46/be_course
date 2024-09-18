@@ -1,16 +1,16 @@
 const Router = require('express');
 const router = new Router();
 
-const TodoController = require('../controllers/TodoController');
-const { validateRequestMiddleware } = require('../middlewares/validateRequestMiddleware');
-const authenticateToken = require('../middlewares/authenticateToken');
+const TodoController = require('../../controllers/TodoController');
+const { validateRequestMiddleware } = require('../../middlewares/validateRequestMiddleware');
+const authenticateToken = require('../../middlewares/authenticateToken');
 const {
 	getTodoValidator,
 	createTodoValidator,
 	updateTodoTitleValidator,
 	updateTodoStatusValidator,
 	deleteTodoValidator,
-} = require('../helpers/validators/todosVaildator');
+} = require('../../helpers/validators/todosVaildator');
 
 router.get('/', getTodoValidator, validateRequestMiddleware, authenticateToken, TodoController.getTodos);
 router.post(`/`, createTodoValidator, validateRequestMiddleware, authenticateToken, TodoController.createTodo);
