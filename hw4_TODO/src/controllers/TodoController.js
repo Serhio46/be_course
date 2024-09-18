@@ -32,7 +32,7 @@ class TodoController {
 			const userId = req.id;
 			const result = await TodoService.updateTodoTitle(id, title, userId);
 
-			if (!result) return res.json({ message: 'Todo not found' }).status(404);
+			if (!result) return res.status(404).json({ message: 'Todo not found' });
 
 			res.json(result).status(200);
 		} catch (e) {
@@ -46,7 +46,7 @@ class TodoController {
 			const userId = req.id;
 			const result = await TodoService.updateStatus(id, userId);
 
-			if (!result) return res.json({ message: 'Todo not found' }).status(404);
+			if (!result) return res.status(404).json({ message: 'Todo not found' });
 
 			res.json(result).status(200);
 		} catch (e) {
@@ -60,7 +60,7 @@ class TodoController {
 			const userId = req.id;
 			const result = await TodoService.deleteTodoById(id, userId);
 
-			if (!result) return res.json({ message: 'Todo not found' }).status(404);
+			if (!result) return res.status(404).json({ message: 'Todo not found' });
 
 			res.json(result).status(200);
 		} catch (e) {
