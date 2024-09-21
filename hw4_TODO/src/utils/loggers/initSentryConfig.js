@@ -1,11 +1,9 @@
 const Sentry = require('@sentry/node');
 const { nodeProfilingIntegration } = require('@sentry/profiling-node');
 
-const initSentry = dsn => {
+if (process.env.NODE_ENV === 'production') {
 	Sentry.init({
-		dsn,
+		dsn: process.env.SENTRY_DSN,
 		integrations: [nodeProfilingIntegration()],
 	});
-};
-
-module.exports = initSentry;
+}
