@@ -1,4 +1,5 @@
 const { body, header } = require('express-validator');
+const { headerJWTValidator } = require('./index');
 
 const userValidator = [
 	body('userName')
@@ -19,7 +20,10 @@ const userValidator = [
 
 const loginUserValidation = [...userValidator, header('Authorization').notEmpty().isJWT().withMessage('Unauthorized')];
 
+const updateUserValidator = [body('updates').notEmpty().withMessage('Updates are required'), ...headerJWTValidator];
+
 module.exports = {
 	userValidator,
 	loginUserValidation,
+	updateUserValidator,
 };

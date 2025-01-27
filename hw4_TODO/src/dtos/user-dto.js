@@ -1,7 +1,7 @@
 class UserDto {
-	constructor({ userName, id }) {
+	constructor({ userName, _id }) {
 		this.userName = userName;
-		this.id = id;
+		this.id = _id;
 	}
 }
 

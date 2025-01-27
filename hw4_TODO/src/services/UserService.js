@@ -1,39 +1,47 @@
-const { v4: uuidv4 } = require('uuid');
 const bcrypt = require('bcrypt');
 
-const fileHelper = require('../helpers/fileHelper');
-const dbHelper = require('../helpers/dbHelper');
 const User = require('../models/User');
 const TokenHelper = require('../helpers/tokenHelper');
 const UserDto = require('../dtos/user-dto');
 const ApiError = require('../exceptions/apiError');
+const { getConnection, useDefaultDb, ObjectId } = require('../helpers/mongoHelper');
 
 class UserService {
-	async registerUser({ userName, password }) {
-		try {
-			const db = await fileHelper.readFile('db.json');
-			const candidateIndex = db.users?.findIndex(user => user.userName === userName);
+	#COLLECTION = 'users';
 
-			if (candidateIndex !== -1) {
+	async registerUser({ userName, password }) {
+		let connection;
+		try {
+			connection = await getConnection();
+			const db = useDefaultDb(connection);
+			const candidate = await db.collection(this.#COLLECTION).findOne({ userName });
+
+			if (candidate) {
 				throw ApiError.BadRequest('User already exists');
 			}
 
 			const hashedPassword = await bcrypt.hash(password, 3);
-			const newUser = new User({ userName, password: hashedPassword, id: uuidv4() });
-			await fileHelper.writeFile('db.json', dbHelper.addNewEntry(db, newUser, 'users'));
+			const newUser = new User({ userName, password: hashedPassword });
+			const { insertedId } = await db.collection(this.#COLLECTION).insertOne(newUser);
+			connection.close();
 
-			const userDto = new UserDto(newUser);
+			const userDto = new UserDto({ ...newUser, _id: insertedId });
 			const { accessToken } = TokenHelper.generateTokens({ ...userDto });
 			return { user: userDto, accessToken };
 		} catch (e) {
 			throw e;
+		} finally {
+			connection.close();
 		}
 	}
 
 	async loginUser({ userName, password }) {
+		let connection;
 		try {
-			const db = await fileHelper.readFile('db.json');
-			const user = db.users.find(user => user.userName === userName);
+			connection = await getConnection();
+			const db = useDefaultDb(connection);
+			const user = await db.collection(this.#COLLECTION).findOne({ userName });
+			connection.close();
 
 			if (!user) {
 				throw ApiError.BadRequest('Incorrect username or password');
@@ -50,6 +58,79 @@ class UserService {
 			return { user: userDto, accessToken };
 		} catch (e) {
 			throw e;
+		} finally {
+			connection.close();
+		}
+	}
+
+	async updateUserById({ id, updates, userId }) {
+		let connection;
+		try {
+			connection = await getConnection();
+			const db = useDefaultDb(connection);
+
+			if (!ObjectId.isValid(id)) {
+				throw ApiError.BadRequest('Wrong id format');
+			}
+
+			const user = await db.collection(this.#COLLECTION).findOne({ _id: new ObjectId(id) });
+
+			if (!user) {
+				throw ApiError.BadRequest('User not found');
+			}
+
+			if (user._id.toString() !== userId) {
+				throw ApiError.ForbiddenError('You do not have permission to update this user');
+			}
+
+			let password = updates.password;
+			if (password) {
+				password = await bcrypt.hash(updates.password, 3);
+			}
+
+			const updatedUser = await db
+				.collection(this.#COLLECTION)
+				.findOneAndUpdate(
+					{ _id: new ObjectId(id) },
+					{ $set: { ...updates, ...(password ? { password } : {}) } },
+					{ returnDocument: 'after' }
+				);
+
+			const userDto = new UserDto(updatedUser);
+			const { accessToken } = TokenHelper.generateTokens({ ...userDto });
+			return { user: userDto, accessToken };
+		} catch (e) {
+			throw e;
+		} finally {
+			connection.close();
+		}
+	}
+
+	async deleteUserById(id, userId) {
+		let connection;
+		try {
+			connection = await getConnection();
+			const db = useDefaultDb(connection);
+
+			if (!ObjectId.isValid(id)) {
+				throw ApiError.BadRequest('Wrong id format');
+			}
+
+			const user = await db.collection(this.#COLLECTION).findOne({ _id: new ObjectId(id) });
+
+			if (!user) {
+				throw ApiError.BadRequest('User not found');
+			}
+
+			if (user._id.toString() !== userId) {
+				throw ApiError.ForbiddenError('You do not have permission to delete this user');
+			}
+
+			await db.collection(this.#COLLECTION).deleteOne({ _id: new ObjectId(id) });
+		} catch (e) {
+			throw e;
+		} finally {
+			connection.close();
 		}
 	}
 }
