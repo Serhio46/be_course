@@ -19,7 +19,7 @@ class TodoController {
 			const { title, isCompleted } = req.body;
 			const userId = req.id;
 			const result = await TodoService.createTodo(title, isCompleted, userId);
-			res.json(result).status(201);
+			res.status(201).json(result);
 		} catch (e) {
 			next(e);
 		}

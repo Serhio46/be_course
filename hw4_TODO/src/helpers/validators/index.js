@@ -8,7 +8,7 @@ const headerJWTValidator = [
 		.withMessage('Unauthorized')
 		.customSanitizer(value => value.split(' ')[1])
 		.isJWT()
-		.withMessage('Unauthorized5555'),
+		.withMessage('Unauthorized'),
 ];
 
 module.exports = {
